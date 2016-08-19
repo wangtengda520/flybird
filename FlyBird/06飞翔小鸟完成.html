@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+</head>
+<body>
+<canvas id="cvs" width="800" height="600" style="border: 1px solid red;"></canvas>
+<!-- 先把依赖的函数引入 -->
+<script src="./js/util.js"></script>
+<script src="./js/getImgObj.js"></script>
+<script src="./js/bird.js"></script>
+<script src="./js/sky.js"></script>
+<script src="./js/land.js"></script>
+<script src="./js/pipe.js"></script>
+<script>
+    // 获取canvasDOM对象
+    var nCvs = document.getElementById('cvs');
+    // 获取2d绘图环境
+    var ctx = nCvs.getContext('2d');
+
+    // 通过getImgObj来获取图像对象，然后通过回调函数来接收全部图像对象
+    getImgObj(function (imgObj) {
+
+        // 初始化鸟类，把鸟类需要的图像对象传进去
+        Bird.init(imgObj['birds']);
+
+        // 创建一个小鸟对象
+        var bird = new Bird(10, 10, 52, 45);
+
+        // 初始化天空
+        Sky.init(imgObj['sky']);
+
+        // 创建两个天空对象
+        var sky = new Sky();
+        var sky2 = new Sky(800);
+
+        // 初始化大地
+        Land.init(imgObj['land']);
+
+        // 创建4个大地对象
+        var land = new Land();
+        var land2 = new Land(336 * 1);
+        var land3 = new Land(336 * 2);
+        var land4 = new Land(336 * 3);
+
+        // 监听画布点击事件
+        nCvs.addEventListener('click', function () {
+
+            // 让小鸟update时，y轴减2
+            bird.speed = -2;
+        });
+
+        // 初始化
+        Pipe.init(imgObj['pipeDown'], imgObj['pipeUp']);
+
+        // 为了防止游戏还没开始就结束了，所以第一个管道需要有一个比较大的间隔
+        // 左右管道之间的距离是2个管道宽
+        var pipe = new Pipe(200 + imgObj['pipeDown'].width * 3 * 0);
+        var pipe2 = new Pipe(200 + imgObj['pipeDown'].width * 3 * 1);
+        var pipe3 = new Pipe(200 + imgObj['pipeDown'].width * 3 * 2);
+        var pipe4 = new Pipe(200 + imgObj['pipeDown'].width * 3 * 3);
+        var pipe5 = new Pipe(200 + imgObj['pipeDown'].width * 3 * 4);
+        var pipe6 = new Pipe(200 + imgObj['pipeDown'].width * 3 * 5);
+
+        var timer = setInterval(function () {
+
+            // 检测小鸟的中心点在不在管道路径中（碰撞检测）
+            if (ctx.isPointInPath(bird.x + bird.width / 2, bird.y + bird.height / 2)) {
+                clearInterval(timer);
+            }
+
+            // 清除画布
+            ctx.clearRect(0, 0, nCvs.width, nCvs.height);
+
+            // 新开路径,这样当前保留的管道路径就不会重复了
+            ctx.beginPath();
+
+            // 天空相关
+            sky.draw();
+            sky.update();
+            sky2.draw();
+            sky2.update();
+
+            // 管道相关
+            pipe.draw();
+            pipe.update();
+            pipe2.draw();
+            pipe2.update();
+            pipe3.draw();
+            pipe3.update();
+            pipe4.draw();
+            pipe4.update();
+            pipe5.draw();
+            pipe5.update();
+            pipe6.draw();
+            pipe6.update();
+
+            // 大地相关
+            land.draw();
+            land.update();
+            land2.draw();
+            land2.update();
+            land3.draw();
+            land3.update();
+            land4.draw();
+            land4.update();
+
+            // 小鸟相关
+            bird.draw();
+            bird.update();
+
+        }, 1000 / 60);
+    });
+
+</script>
+</body>
+</html>

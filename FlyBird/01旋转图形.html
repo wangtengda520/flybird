@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+</head>
+<body>
+<img  id="img" src="./img/pig.jpg" style="display: none" />
+<canvas id="cvs" width="500" height="500" style="border: 1px solid red;"></canvas>
+<script>
+    // 获取canvasDOM对象
+    var nCvs = document.getElementById('cvs');
+    // 获取2d绘图环境
+    var ctx = nCvs.getContext('2d');
+
+    // 把角度转换为弧度
+    function angleToRad(angle) {
+        return Math.PI / 180 * angle;
+    }
+
+    /*
+     * 如果要让一个图形旋转，需要如下几步骤：
+     * 1、计算好要绘制图形的中心坐标
+     * 2、然后根据计算好的坐标平移坐标系
+     * 3、根据想要旋转的弧度旋转坐标系
+     * 4、绘制图形，绘制的图形的x轴为-width/2，绘制的图形的y轴为-height/2
+     * */
+
+    ctx.strokeRect(0, 0, 50, 50);
+
+
+    ctx.translate(250, 250);
+    ctx.strokeRect(0, 0, 50, 50);
+
+/*    for (var i = 1; i <= 6; i++) {
+        // 不会影响之间绘制好的图像
+        ctx.rotate(angleToRad(20 * i));
+        ctx.strokeRect(0, 0, 50, 50);
+    }*/
+
+    /*
+    * rotate 是以坐标系的0,0点为中心旋转的，
+    * 为了能够让旋转的参考点是图形的中心点，
+    * 所以我们需要让坐标系的0,0点和图形的中心点融合。
+    * */
+
+    // 平移坐标系到图形的中心
+    ctx.translate(25, 25);
+
+
+    // 画多个旋转矩形
+    for (var i = 1; i <= 6; i++) {
+        // 旋转坐标系
+        ctx.rotate(angleToRad(20 * i));
+
+        // 绘制图形，为了让图形的中心和坐标系中心融合，
+        // 所以绘制图形时的坐标系变了，变成了-的宽高各一半。
+        ctx.strokeRect(-25, -25, 50, 50);
+    }
+
+
+</script>
+</body>
+</html>

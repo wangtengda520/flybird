@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas</title>
+</head>
+<body>
+<img src="./img/sprite.png" alt="" id="img" style="display:none"/>
+<canvas id="cvs" width="500" height="500" style="border:1px solid red;"></canvas>
+<script>
+	// 获取canvasDom对象
+	var Cvs=document.getElementById('cvs');
+	// 获取2d绘图环境
+	var ctx=Cvs.getContext("2d");
+	//把角度转换为弧度
+	function angleToRad(angle) {
+		return Math.PI/180*angle;
+	}
+	// 绑定监听事件
+	var spriteImg=document.getElementById("img");
+	spriteImg.addEventListener('load',function(){
+		// 创建精灵类构造函数
+		function Sprite(x,y,width,height){
+			this.x=x;
+			this.y=y;
+			this.width=width;
+			this.height=height;
+			this.index=0;
+			this.direction=0;
+			this.speed=-1;
+		}
+		// 在构造函数的原型中创建画布函数
+	    Sprite.prototype.draw=function(){
+	    	// 裁剪的x轴坐标代表一个方向的第几帧
+	    	// 裁剪的Y轴坐标代表一个方向
+	    	ctx.drawImage(spriteImg,256*this.index,256*this.direction,256,256,this.x,this.y,this.width,this.height);
+	    };
+	    // 创建动态更新函数
+	    Sprite.prototype.update=function(){
+	    	this.index=++this.index%8;
+	    	switch(this.direction){
+	    		case 0:
+	    		     this.x+=this.speed;
+	    		     if(this.x<-this.width){
+	    		     	this.x=500;
+	    		     }
+	    		     break;
+	    		case 2:
+	    		     this.y+=this.speed;
+	    		     if(this.y<-this.height){
+	    		     	this.y=500;
+	    		     }
+	    		     break;
+	    		case 4:
+	    		     this.x+=-this.speed;
+	    		     if(this.x>500){
+	    		     	this.x=-this.width;
+	    		     }
+	    		     break;
+	    		case 6:
+	    		     this.x+=-this.speed;
+	    		     if(this.y>500){
+	    		     	this.y=-this.height;
+	    		     }
+	    		     break;               
+	    	}
+	    };
+	     
+	    // 创建改变方向的函数
+	    Sprite.prototype.changeDirection=function(keycode){
+    	   switch (keycode){
+		   case 16:
+	       this.direction=parseInt((Math.random()*4))*2;
+	       break;
+	       case 37:
+	       this.direction=0;
+	       break;
+	       case 38:
+	       this.direction=2;
+	       break;
+	       case 39:
+	       this.direction=4;
+	       break;
+	       case 40:
+	       this.direction=6;
+	       break;
+	       
+	    	}
+
+	    };
+	    // 随机创建精灵
+	    var sprites=[],temWH;
+	    for(var i=0;i<100;i++){
+	    	temWH=Math.random()*256+30;
+	    	sprites.push(new Sprite(Math.random()*400+10,Math.random()*400+10,temWH,temWH));
+	    }
+	    // 监听键盘事件
+	    document.addEventListener('keydown',function(e){
+             sprites.forEach(function(val,idx){
+             	val.changeDirection(e.keyCode)
+             });
+
+	    })
+	    setInterval(function(){
+	    	ctx.clearRect(0,0,cvs.width,cvs.height);
+           sprites.forEach(function(val,idx){
+           	val.draw();
+           	val.update();
+           });
+	    },1000/45);
+
+
+
+
+});
+
+</script>
+
+
+
+</body>
+</html>

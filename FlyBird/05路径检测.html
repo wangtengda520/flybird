@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+</head>
+<body>
+<canvas id="cvs" width="500" height="500" style="border: 1px solid red;"></canvas>
+<script>
+    // 获取canvasDOM对象
+    var nCvs = document.getElementById('cvs');
+    // 获取2d绘图环境
+    var ctx = nCvs.getContext('2d');
+
+    // 把角度转换为弧度
+    function angleToRad(angle) {
+        return Math.PI / 180 * angle;
+    }
+
+    /*
+    * 路径检测方式：isPointInPath
+    * 判断传入的坐标点在不在当前的路径当中
+    * 语法：ctx.isPointInPath(x轴坐标，y轴坐标)，返回boolean值
+    * */
+
+    ctx.rect(50, 50, 200, 200);
+    ctx.stroke();
+
+    // 检测某个点在不在路径中
+    console.log(ctx.isPointInPath(10, 10));
+    console.log(ctx.isPointInPath(100, 100));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+</head>
+<body>
+<img  id="img" src="./img/pig.jpg" style="display: none" />
+<canvas id="cvs" width="500" height="500" style="border: 1px solid red;"></canvas>
+<script>
+    // 获取canvasDOM对象
+    var nCvs = document.getElementById('cvs');
+    // 获取2d绘图环境
+    var ctx = nCvs.getContext('2d');
+
+    // 把角度转换为弧度
+    function angleToRad(angle) {
+        return Math.PI / 180 * angle;
+    }
+
+    /*
+    * 通过观察，管道存在一些特点或者规律：
+    * 1、不同的管道高度不一样，也就是说他们的高度是随机生成的，
+    * 2、两个管道之间的间隔是不变的
+    * 3、如果知道了上管道的高度，那么下管道的高度也就可以计算出来，
+    * 也就是说，随机生成上管道的高度，那么下管道高度就有了。
+    * 4、两个管道是成对出现的，它们的x轴坐标是一致的。
+    * 5、重点：当管道走出画布时，从右边重新进去画布，这时候需要再随机生成一下管道的高度。
+    *
+    * 它们有很多共同点，所以将来我们在写管道类的时候，默认是一对管道。
+    * */
+
+
+
+</script>
+</body>
+</html>
